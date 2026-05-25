@@ -1,26 +1,44 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg-main: #09090b;
+  --color-bg-task: #141417;
+  --color-border-subtle: #27272a;
+  --color-text-main: #f4f4f5;
+  --color-text-dim: #71717a;
+  --color-accent-action: #34d399;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes terminal-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
   }
 }
 
+/* 1. This handles the far-right static edge block on focus */
+.edge-status-focus:focus-within::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 12px;
+  width: 4px;
+  height: 16px;
+  background-color: var(--color-accent-action);
+  animation: terminal-blink 1s step-end infinite;
+  box-shadow: 0 0 8px #34d399;
+}
+
+/* 2. Style the native browser typing caret to be green and visible */
+.custom-terminal-caret {
+  caret-color: var(--color-accent-action);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  overflow: hidden;
 }
