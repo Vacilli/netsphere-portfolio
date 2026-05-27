@@ -4,6 +4,10 @@ import { useState } from 'react'
 import BootSequence from './components/boot-sequence'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTerminal, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
+import ProfileManifest from './components/profile-manifest'
+import DataVault from './components/data-vault'
+import SecureLine from './components/secure-line'
+import Home from './components/home'
 
 export default function Page() {
   const [booted, setBooted] = useState(false)
@@ -119,66 +123,13 @@ export default function Page() {
 
             {/* Render Output Content Portal based on Active Subsystem State */}
             <div className='flex-1 overflow-y-auto p-8 font-mono animate-fade-in'>
-              {activeTab === 'home' && (
-                <div className='space-y-4 max-w-xl'>
-                  <p className='text-xs text-[var(--color-accent-action)] animate-pulse'>
-                    &gt; CODENAME: CORE_ECOSYSTEM_INITIALIZED
-                  </p>
-                  <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
-                    Building Digital Ecosystems Without Muted Signals.
-                  </h2>
-                  <p className='leading-relaxed text-zinc-400 text-sm'>
-                    I engineer minimal, high-performance full-stack web
-                    architecture with zero wasted motion. Specialized in
-                    micro-frontends, robust backend systems, and clean
-                    programmatic user interfaces.
-                  </p>
-                </div>
-              )}
+              {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
 
-              {activeTab === 'profile' && (
-                <div className='space-y-4'>
-                  <p className='text-xs text-[var(--color-accent-action)]'>
-                    &gt; cat systemctl_status_developer.log
-                  </p>
-                  <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
-                    System Manifest // Resume
-                  </h2>
-                  <div className='text-zinc-400 text-sm'>
-                    [Profile content component manifest will mount directly
-                    inside this node]
-                  </div>
-                </div>
-              )}
+              {activeTab === 'profile' && <ProfileManifest />}
 
-              {activeTab === 'vault' && (
-                <div className='space-y-4'>
-                  <p className='text-xs text-[var(--color-accent-action)]'>
-                    &gt; run directory_scan --target=projects
-                  </p>
-                  <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
-                    The Data Vault // Projects
-                  </h2>
-                  <div className='text-zinc-400 text-sm'>
-                    [Project cards for Codex OS and Netsphere Dashboard will
-                    output here]
-                  </div>
-                </div>
-              )}
+              {activeTab === 'vault' && <DataVault />}
 
-              {activeTab === 'secure-line' && (
-                <div className='space-y-4'>
-                  <p className='text-xs text-[var(--color-accent-action)]'>
-                    &gt; open_port --secure-link
-                  </p>
-                  <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
-                    Establish Secure Uplink // Contact
-                  </h2>
-                  <div className='text-zinc-400 text-sm'>
-                    [Direct action terminal email form interface]
-                  </div>
-                </div>
-              )}
+              {activeTab === 'secure-line' && <SecureLine />}
             </div>
           </section>
         </div>
