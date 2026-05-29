@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 
 const PROJECT_REGISTRY = [
@@ -12,7 +14,7 @@ const PROJECT_REGISTRY = [
     liveUrl: 'https://codex-os-task-manager.vercel.app/',
     repoUrl: 'https://github.com/Vacilli/React-To_Do-List',
     hasVideo: true,
-    // 1. STRIPPED '/public' out of the asset string to align with Next.js path routing
+    // Asset path aligned with Next.js static routing
     videoSrc: '/assets/demo.gif',
   },
   {
@@ -30,7 +32,7 @@ const PROJECT_REGISTRY = [
   },
 ]
 
-export default function DataVault() {
+export default function VaultPage() {
   const [selectedId, setSelectedId] = useState('NEX-01')
 
   const activeProject =
@@ -122,7 +124,7 @@ export default function DataVault() {
               <div className='border border-[var(--color-border-subtle)] bg-black relative overflow-hidden aspect-video group'>
                 <div className='absolute inset-0 bg-linear-to-b from-transparent via-zinc-950/10 to-zinc-950/20 pointer-events-none z-10 mix-blend-overlay' />
 
-                {/* 2. DYNAMIC MEDIA ROUTER: Check if file type is a standard GIF layout or raw video pipeline */}
+                {/* DYNAMIC MEDIA ROUTER */}
                 {isGif ? (
                   <img
                     src={activeProject.videoSrc}
@@ -164,7 +166,7 @@ export default function DataVault() {
               &gt; INITIALIZE_LIVE_INTERFACE_PORTAL
             </a>
             <a
-              href={activeProject.repoUrl}
+              href={activeProject.repoUrl} // Direct access to the string data model
               target='_blank'
               rel='noreferrer'
               className='text-xs text-[var(--color-text-dim)] hover:text-[var(--color-text-main)] hover:underline'

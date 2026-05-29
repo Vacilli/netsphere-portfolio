@@ -1,8 +1,9 @@
 'use client'
+
 import React, { useState } from 'react'
 import { broadcastPacket } from '@/app/actions/broadcast'
 
-export default function SecureLine() {
+export default function SecureLinePage() {
   const [isTransmitting, setIsTransmitting] = useState(false)
   const [transmitted, setTransmitted] = useState(false)
   const [systemError, setSystemError] = useState<string | null>(null)

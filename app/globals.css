@@ -57,3 +57,91 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent-action);
 }
+
+@layer utilities {
+  /* Destructive system crash animation */
+  .animate-glitch-out {
+    animation: glitch-out 0.4s steps(2) forwards;
+  }
+
+  /* Clean matrix style alpha dissolve */
+  .animate-matrix-dissolve {
+    animation: matrix-dissolve 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@layer utilities {
+  /* High-end corporate terminal bypass transition */
+  .animate-matrix-dissolve {
+    animation:
+      matrix-success-flash 0.2s ease-out,
+      matrix-cascade-dissolve 0.5s steps(8) 0.1s forwards;
+  }
+
+  /* Chaotic system security collapse */
+  .animate-glitch-out {
+    animation: glitch-out 0.4s steps(2) forwards;
+  }
+}
+
+/* SUCCESS STAGE 1: Fast terminal phosphor green screen over-voltage flash */
+@keyframes matrix-success-flash {
+  0% {
+    filter: brightness(1) contrast(1);
+    background-color: transparent;
+  }
+  50% {
+    filter: brightness(2.5) contrast(1.5)
+      drop-shadow(0 0 15px var(--color-accent-action));
+    background-color: rgba(
+      16,
+      185,
+      129,
+      0.1
+    ); /* Subtle emerald grid line flood */
+  }
+  100% {
+    filter: brightness(1.2) contrast(1.1);
+  }
+}
+
+/* SUCCESS STAGE 2: Downward pixelated cascade curtain slice */
+@keyframes matrix-cascade-dissolve {
+  0% {
+    opacity: 1;
+    clip-path: inset(0% 0% 0% 0%);
+    transform: translateY(0);
+  }
+  50% {
+    clip-path: inset(
+      0% 0% 50% 0%
+    ); /* Splits view frame like an old CRT console cutting out */
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(100% 0% 0% 0%); /* Pure downward window wipe */
+    transform: translateY(10px);
+  }
+}
+
+/* KEEPING YOUR JAGGED CORRUPT FAILURE TRANSITION */
+@keyframes glitch-out {
+  0% {
+    opacity: 1;
+    transform: skew(0deg) scale(1);
+  }
+  20% {
+    transform: skew(6deg) translate(8px, -3px);
+    filter: hue-rotate(90deg) invert(0.3);
+  }
+  50% {
+    clip-path: inset(20% 0 40% 0);
+    transform: skew(-12deg) translate(-5px, 5px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: brightness(0);
+  }
+}

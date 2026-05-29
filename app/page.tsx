@@ -1,139 +1,323 @@
 'use client'
 
-import { useState } from 'react'
-import BootSequence from './components/boot-sequence'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTerminal, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
-import ProfileManifest from './components/profile-manifest'
-import DataVault from './components/data-vault'
-import SecureLine from './components/secure-line'
-import Home from './components/home'
+import React, { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import AuthSequence from './components/auth-sequence'
 
-export default function Page() {
-  const [booted, setBooted] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  // Track which terminal subsystem module is currently active
-  const [activeTab, setActiveTab] = useState<
-    'home' | 'profile' | 'vault' | 'secure-line'
-  >('home')
+interface LogEntry {
+  id: string
+  text: string
+  type: 'system' | 'success' | 'warn' | 'user'
+}
+
+export default function TerminalMainframePage() {
+  const router = useRouter()
+  const [inputCommand, setInputCommand] = useState('')
+  const [terminalLogs, setTerminalLogs] = useState<LogEntry[]>([])
+
+  // Terminal Native Authentication Flags
+  const [isAwaitingPassword, setIsAwaitingPassword] = useState(false)
+  const [authStage, setAuthStage] = useState<
+    'idle' | 'loading_success' | 'loading_failed'
+  >('idle')
+
+  const logContainerRef = useRef<HTMLDivElement>(null)
+
+  // 1. Core Log Injection Stream (Strict Mode Compatible)
+  useEffect(() => {
+    const activeTimers: NodeJS.Timeout[] = []
+    const bootSequence = [
+      { text: 'INITIALIZING NETSPHERE MASTER DECK LINK...', type: 'system' },
+      {
+        text: 'ESTABLISHING SECURE PROTOCOLS // CORE_V4.2.1...',
+        type: 'system',
+      },
+      { text: 'LOADING TELEMETRY PARAMETERS... [OK]', type: 'success' },
+      {
+        text: 'WARNING: UNAUTHORIZED INTERFACES WILL BE LOGGED.',
+        type: 'warn',
+      },
+      {
+        text: 'TYPE "help" TO DISCOVER ACTIVE TERMINAL ROUTINES.',
+        type: 'system',
+      },
+    ] as const
+
+    bootSequence.forEach((log, index) => {
+      const streamTimer = setTimeout(
+        () => {
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `boot-${Date.now()}-${index}`,
+              text: log.text,
+              type: log.type,
+            },
+          ])
+        },
+        (index + 1) * 250,
+      )
+
+      activeTimers.push(streamTimer)
+    })
+
+    // Clears timers on unmount so Strict Mode double-taps reset safely
+    return () => activeTimers.forEach((timerId) => clearTimeout(timerId))
+  }, [])
+
+  // Auto-scroll logs mechanism
+  useEffect(() => {
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight
+    }
+  }, [terminalLogs])
+
+  // Handles the interactive button click sequence after full-screen loading completes
+  const handleAuthSequenceResolution = () => {
+    if (authStage === 'loading_success') {
+      setAuthStage('idle')
+      router.push('/vault')
+    } else if (authStage === 'loading_failed') {
+      setAuthStage('idle')
+      setTerminalLogs((prev) => [
+        ...prev,
+        {
+          id: `err-${Date.now()}`,
+          text: 'ACCESS_DENIED: SECURE_AUTHENTICATION_OVERRIDE_FAILED',
+          type: 'warn',
+        },
+      ])
+    }
+  }
+
+  // 2. Command Line Router Execution Logic
+  const handleCommandSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const rawInput = inputCommand.trim()
+
+    if (isAwaitingPassword) {
+      setTerminalLogs((prev) => [
+        ...prev,
+        { id: `${Date.now()}-user`, text: `> **********`, type: 'user' },
+      ])
+      setIsAwaitingPassword(false)
+
+      if (rawInput === 'password123') {
+        setAuthStage('loading_success')
+      } else {
+        setAuthStage('loading_failed')
+      }
+
+      setInputCommand('')
+      return
+    }
+
+    const cleanCmd = rawInput.toLowerCase()
+    if (!cleanCmd) return
+
+    setTerminalLogs((prev) => [
+      ...prev,
+      { id: `${Date.now()}-user`, text: `> ${inputCommand}`, type: 'user' },
+    ])
+    setInputCommand('')
+
+    setTimeout(() => {
+      switch (cleanCmd) {
+        case 'help':
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-res`,
+              text: 'AVAILABLE ROUTINES: [about] [profile] [demo] [contact] [clear]',
+              type: 'system',
+            },
+          ])
+          break
+
+        case 'about':
+          const manifest = [
+            'SYSTEM_MANIFEST:',
+            '------------------------------------------',
+            'IDENTITY: Fullstack Software Engineer',
+            'FOCUS: Low-level systems, hardened UI/UX, Core Architectures.',
+            '------------------------------------------',
+            'SKILL_CORE_MATRIX:',
+            '[React] [Next.js] [TypeScript] [TailwindCSS] [Node.js] [SQL/Postgres]',
+            '------------------------------------------',
+            'STATUS: OPEN_TO_OPPORTUNITIES // SEEKING_COLLABORATION',
+          ]
+
+          manifest.forEach((line, i) => {
+            setTerminalLogs((prev) => [
+              ...prev,
+              { id: `about-${Date.now()}-${i}`, text: line, type: 'success' },
+            ])
+          })
+          break
+
+        case 'profile':
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-nav`,
+              text: 'LOADING PROFILE_MANIFEST...',
+              type: 'system',
+            },
+          ])
+          setTimeout(() => router.push('/profile'), 600)
+          break
+
+        case 'demo':
+        case 'vault':
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-res`,
+              text: 'ROUTING TO VAULT_SUBDIRECTORY...',
+              type: 'system',
+            },
+          ])
+          setTimeout(() => router.push('/vault'), 600)
+          break
+
+        case 'contact':
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-res`,
+              text: 'ESTABLISHING SECURE LINE PROTOCOL...',
+              type: 'system',
+            },
+          ])
+          setTimeout(() => router.push('/secure-line'), 600)
+          break
+
+        case 'login':
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `log-${Date.now()}-1`,
+              text: 'AUTH_SEQUENCE_INITIATED...',
+              type: 'system',
+            },
+            {
+              id: `log-${Date.now()}-2`,
+              text: 'ENTER_SYSTEM_KEY: >',
+              type: 'system',
+            },
+          ])
+          setIsAwaitingPassword(true)
+          break
+
+        case 'clear':
+          setTerminalLogs([])
+          break
+
+        default:
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-res`,
+              text: `COMMAND_NOT_FOUND: "${cleanCmd}"`,
+              type: 'warn',
+            },
+          ])
+      }
+    }, 150)
+  }
 
   return (
-    <>
-      {/* 1. Cinematic Boot Screen Layer */}
-      {!booted && <BootSequence onComplete={() => setBooted(true)} />}
+    <div className='space-y-8 max-w-2xl font-mono text-xs text-[var(--color-text-main)] animate-scan p-4 relative h-full'>
+      {authStage !== 'idle' && (
+        <AuthSequence
+          status={authStage === 'loading_success' ? 'success' : 'failed'}
+          onComplete={handleAuthSequenceResolution}
+        />
+      )}
 
-      {/* 2. Main Terminal Grid Framework */}
-      <main className='min-h-screen h-screen w-screen bg-[var(--color-bg-main)] text-[var(--color-text-main)] flex flex-col font-mono overflow-hidden select-none'>
-        {/* Top Telemetry Strip */}
-        <div className='h-7 w-full border-b border-[var(--color-border-subtle)] px-4 flex items-center justify-between text-[10px] text-[var(--color-text-dim)] tracking-wider'>
-          <div className='flex items-center gap-2'>
-            <span className='h-1.5 w-1.5 rounded-full bg-[var(--color-accent-action)] animate-pulse shadow-[0_0_8px_#34d399]' />
-            <span>SYSTEM: ONLINE</span>
-          </div>
-          <div>NETSPHERE_SECURE_NODE_01</div>
-          <div>2026-05-23T21:35Z</div>
+      {/* HEADER DIAGNOSTIC DISPLAY */}
+      <div className='border-b border-[var(--color-border-subtle)] pb-4'>
+        <p className='text-[11px] text-[var(--color-accent-action)] mb-1 animate-pulse'>
+          &gt; SYSTEM_STATUS: OPERATIONAL // NODE_0X4F_ONLINE
+        </p>
+        <h1 className='text-xl font-bold uppercase tracking-wider'>
+          Core Console // Terminal Mainframe
+        </h1>
+      </div>
+
+      {/* STATIC METRIC MATRIX PANEL */}
+      <div className='grid grid-cols-2 gap-4 border border-[var(--color-border-subtle)]/40 bg-zinc-950/20 p-4 rounded-sm'>
+        <div className='space-y-1'>
+          <p className='text-[10px] text-[var(--color-text-dim)] uppercase'>
+            [PARAMETER]
+          </p>
+          <p>
+            <span className='text-[var(--color-text-dim)]'>LOC:</span>{' '}
+            SAN_JOY_CR
+          </p>
+          <p>
+            <span className='text-[var(--color-text-dim)]'>SYS:</span>{' '}
+            NEXTJS_15_APP
+          </p>
         </div>
-
-        {/* System Body Split */}
-        <div className='flex-1 flex w-full overflow-hidden'>
-          {/* Left Pane - System Monitor Control Board */}
-          <section className='w-80 border-r border-[var(--color-border-subtle)] p-6 flex flex-col justify-between hidden md:flex bg-black/20'>
-            <div className='space-y-6'>
-              <div>
-                <h1 className='text-sm font-bold tracking-wider uppercase text-[var(--color-text-main)]'>
-                  Systems Architect
-                </h1>
-                <p className='text-[11px] text-[var(--color-text-dim)] mt-0.5'>
-                  &gt; Fullstack Software Engineer
-                </p>
-              </div>
-
-              {/* Dynamic Navigation Directory Links */}
-              <nav className='space-y-2 text-xs'>
-                <div className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest mb-2'>
-                  /root_directory
-                </div>
-
-                {(['home', 'profile', 'vault', 'secure-line'] as const).map(
-                  (dir, i) => {
-                    const isActive = activeTab === dir
-                    return (
-                      <button
-                        key={dir}
-                        onClick={() => setActiveTab(dir)}
-                        className={`flex items-center gap-2 text-left w-full transition-colors cursor-pointer group text-xs ${
-                          isActive
-                            ? 'text-[var(--color-accent-action)]'
-                            : 'text-[var(--color-text-dim)] hover:text-[var(--color-text-main)]'
-                        }`}
-                      >
-                        <span>0{i + 1}.</span>
-                        <span
-                          className={
-                            isActive
-                              ? 'underline font-bold'
-                              : 'group-hover:underline'
-                          }
-                        >
-                          ~/{dir}
-                          {isActive && ' [ACTIVE]'}
-                        </span>
-                      </button>
-                    )
-                  },
-                )}
-              </nav>
-            </div>
-
-            {/* Outbound Link Node */}
-            <div className='border-t border-[var(--color-border-subtle)] pt-4'>
-              <a
-                href='https://linkedin.com'
-                target='_blank'
-                rel='noreferrer'
-                className='text-[10px] tracking-widest text-[var(--color-text-dim)] hover:text-[var(--color-text-main)] transition-colors flex items-center gap-2 uppercase'
-              >
-                <FontAwesomeIcon icon={faCodeBranch} className='text-[9px]' />
-                <span>[LINKEDIN_SECURE_NODE]</span>
-              </a>
-            </div>
-          </section>
-
-          {/* Right Pane - Content Viewport Frame */}
-          <section className='flex-1 flex flex-col overflow-hidden'>
-            {/* Integrated Custom Search Header */}
-            <header className='h-16 flex items-center justify-between px-8 border-b border-[var(--color-border-subtle)] bg-zinc-950/40'>
-              {/* The master wrapper container handles the far-right edge block status */}
-              <div className='w-full relative group flex items-center edge-status-focus'>
-                {/* Terminal Icon Prefix Indicator */}
-                <span className='absolute left-0 text-[var(--color-text-dim)] group-focus-within:text-[var(--color-text-main)] transition-colors'>
-                  <FontAwesomeIcon icon={faTerminal} className='text-xs' />
-                </span>
-
-                {/* A Single, Bulletproof Native Input Engine */}
-                <input
-                  type='text'
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder='EXECUTE_SEARCH_PROTOCOL...'
-                  className='w-full bg-transparent border-b border-[var(--color-border-subtle)] focus:border-custom-terminal-caret focus:border-[var(--color-text-main)] py-2 pl-7 pr-8 text-sm font-mono tracking-[0.1em] text-[var(--color-text-main)] focus:outline-none transition-all placeholder:text-[var(--color-text-dim)] uppercase custom-terminal-caret'
-                />
-              </div>
-            </header>
-
-            {/* Render Output Content Portal based on Active Subsystem State */}
-            <div className='flex-1 overflow-y-auto p-8 font-mono animate-fade-in'>
-              {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
-
-              {activeTab === 'profile' && <ProfileManifest />}
-
-              {activeTab === 'vault' && <DataVault />}
-
-              {activeTab === 'secure-line' && <SecureLine />}
-            </div>
-          </section>
+        <div className='space-y-1'>
+          <p className='text-[10px] text-[var(--color-text-dim)] uppercase'>
+            [TELEMETRY]
+          </p>
+          <p>
+            <span className='text-[var(--color-text-dim)]'>ROLE:</span>{' '}
+            CORE_ENGINEER
+          </p>
+          <p>
+            <span className='text-[var(--color-text-dim)]'>UPTIME:</span>{' '}
+            LIVE_GRID_ACTIVE
+          </p>
         </div>
-      </main>
-    </>
+      </div>
+
+      {/* LIVE SIMULATED STREAM LOG WINDOW */}
+      <div className='space-y-2'>
+        <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-wider'>
+          // LOG_STREAM_FEED
+        </p>
+        <div
+          ref={logContainerRef}
+          className='h-48 w-full bg-black/40 border border-[var(--color-border-subtle)] p-4 overflow-y-auto custom-scrollbar space-y-2 rounded-sm'
+        >
+          {terminalLogs.map((log) => (
+            <p
+              key={log.id}
+              className={`leading-relaxed tracking-wide ${log.type === 'success' ? 'text-emerald-400' : log.type === 'warn' ? 'text-amber-500 font-semibold' : log.type === 'user' ? 'text-[var(--color-accent-action)]' : 'text-zinc-400'}`}
+            >
+              {log.text}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* CORE TERMINAL FIELD INPUT COMMAND ROUTER */}
+      <form onSubmit={handleCommandSubmit} className='space-y-2'>
+        <label
+          htmlFor='terminal-input'
+          className='block text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest'
+        >
+          EXECUTE_ROUTINE_PROMPT
+        </label>
+        <div className='flex items-center gap-2 border border-[var(--color-border-subtle)] focus-within:border-[var(--color-accent-action)] bg-zinc-950/40 p-3 transition-all rounded-sm'>
+          <span className='text-[var(--color-accent-action)] font-bold select-none'>
+            $
+          </span>
+          <input
+            id='terminal-input'
+            type='text'
+            autoComplete='off'
+            value={inputCommand}
+            onChange={(e) => setInputCommand(e.target.value)}
+            placeholder='TYPE help, about, profile, demo or contact...'
+            className='w-full bg-transparent border-none outline-none text-xs text-[var(--color-text-main)] uppercase tracking-wide focus:ring-0 p-0'
+          />
+        </div>
+      </form>
+    </div>
   )
 }

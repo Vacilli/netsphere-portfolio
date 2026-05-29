@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 
 interface BootSequenceProps {
-  onComplete: () => void
+  // Adding the optional status argument ensures it supports your new success/fail states
+  onComplete: (status?: 'success' | 'failed') => void
 }
 
 export default function BootSequence({ onComplete }: BootSequenceProps) {
@@ -35,32 +36,37 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
     return () => clearTimeout(timeout)
   }, [progress])
 
-  // 2. Click/Keydown Listener for Exploit Execution
+  // 2. Multi-Platform System Ignition Listener
   useEffect(() => {
     if (!isReady) return
 
-    const handleExecute = () => {
-      setIsTerminated(true)
-      // Wait for the slick 1000ms zoom/fade transition to finish before unmounting
-      setTimeout(() => {
-        onComplete()
-      }, 1000)
-    }
-
+    // Handles keyboard activation on desktops
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
-        handleExecute()
+        e.preventDefault()
+        triggerSystemBreach()
       }
     }
 
-    window.addEventListener('click', handleExecute)
+    // Handles touch taps on mobile and mouse clicks on desktop
+    const handleGlobalClick = () => {
+      triggerSystemBreach()
+    }
+
+    const triggerSystemBreach = () => {
+      setIsTerminated(true)
+      onComplete('success') // Fires our downward matrix cascade curtain
+    }
+
+    // Bind the hardware interfaces
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('click', handleGlobalClick)
 
     return () => {
-      window.removeEventListener('click', handleExecute)
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('click', handleGlobalClick)
     }
-  }, [isReady, onComplete])
+  }, [isReady])
 
   return (
     <div
