@@ -42,10 +42,10 @@ export default function VaultPage() {
   const isGif = activeProject.videoSrc.endsWith('.gif')
 
   return (
-    <div className='space-y-6 max-w-5xl animate-scan font-mono'>
+    <div className='space-y-6 max-w-5xl animate-scan font-mono p-4'>
       {/* HEADER NODE */}
       <div className='border-b border-[var(--color-border-subtle)] pb-4'>
-        <p className='text-xs text-[var(--color-accent-action)] mb-1'>
+        <p className='text-xs text-[var(--color-accent-action)] mb-1 animate-pulse'>
           &gt; EXECUTING: DIRECTORY_SCAN --TARGET=SECURE_VAULT --STATUS=ONLINE
         </p>
         <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>

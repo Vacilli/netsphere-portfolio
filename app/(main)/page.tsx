@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import AuthSequence from './components/auth-sequence'
+import AuthSequence from '../components/auth-sequence'
 
 interface LogEntry {
   id: string
@@ -237,7 +237,7 @@ export default function TerminalMainframePage() {
 
       {/* HEADER DIAGNOSTIC DISPLAY */}
       <div className='border-b border-[var(--color-border-subtle)] pb-4'>
-        <p className='text-[11px] text-[var(--color-accent-action)] mb-1 animate-pulse'>
+        <p className='text-xs text-[var(--color-accent-action)] mb-1 animate-pulse'>
           &gt; SYSTEM_STATUS: OPERATIONAL // NODE_0X4F_ONLINE
         </p>
         <h1 className='text-xl font-bold uppercase tracking-wider'>

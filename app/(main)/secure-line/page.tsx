@@ -36,10 +36,10 @@ export default function SecureLinePage() {
   }
 
   return (
-    <div className='space-y-8 max-w-2xl animate-scan font-mono text-xs'>
+    <div className='space-y-8 max-w-2xl animate-scan font-mono text-xs p-4'>
       {/* MAIN HEADER NODE */}
       <div className='border-b border-[var(--color-border-subtle)] pb-4'>
-        <p className='text-[11px] text-[var(--color-accent-action)] mb-1'>
+        <p className='text-xs text-[var(--color-accent-action)] mb-1 animate-pulse'>
           &gt; EXECUTING: COMMS_LINK_LIVE // SECURE_EXTERNAL_ROUTE_ACTIVE...
         </p>
         <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
