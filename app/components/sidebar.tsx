@@ -38,6 +38,10 @@ export default function Sidebar() {
           {navigationRoutes.map((route, i) => {
             const isActive = pathname === route.path
 
+            // CALCULATE THE BOUNDARY MAPPER
+            const isLastItem = i === navigationRoutes.length - 1
+            const treeSymbol = isLastItem ? '└──' : '├──'
+
             return (
               <Link
                 key={route.path}
@@ -51,13 +55,14 @@ export default function Sidebar() {
                 <div className='flex items-center gap-2.5'>
                   {/* Structural Directory Node Vector Lines */}
                   <span
-                    className={`transition-all duration-200 text-xs ${
+                    className={`transition-all duration-200 font-bold text-xs ${
                       isActive
                         ? 'text-[var(--color-accent-action)] opacity-100 scale-100'
-                        : 'text-zinc-800 opacity-50 group-hover:opacity-100 group-hover:text-[var(--color-text-main)]'
+                        : 'text-[var(--color-accent-action)] opacity-50 group-hover:opacity-100 group-hover:text-[var(--color-text-main)]'
                     }`}
                   >
-                    {isActive ? '●' : '├─'}
+                    {/* Keeps the indicator clear but prints the true directory shape when inactive */}
+                    {isActive ? '●' : treeSymbol}
                   </span>
 
                   {/* Directory Token Path Text */}

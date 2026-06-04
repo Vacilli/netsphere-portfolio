@@ -8,21 +8,28 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  // 1. What shows up on the browser tab
-  title: 'MAINFRAME // [Your Name] — Software Engineer',
+  // 1. Browser Tab Configuration
+  title: 'MAINFRAME // Giovanni Amighetti — Software Engineer',
   description:
-    'Interactive terminal interface displaying the professional dossier, core technical competencies, and project vault of [Your Name].',
+    'Interactive terminal interface displaying the professional dossier, core technical competencies, and project vault of Giovanni Amighetti.',
 
-  // 2. What shows up when you share the link on LinkedIn, Discord, or Slack
+  // 2. Favicons & System Icons
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/apple-touch-icon.png', // Fallback for iOS
+  },
+
+  // 3. OpenGraph / Rich Media Link Previews (LinkedIn, Discord, Slack)
   openGraph: {
-    title: '[Your Name] | Software Engineer & Systems Architect',
+    title: 'Giovanni Amighetti | Software Engineer & Systems Architect',
     description:
       'Explore an interactive terminal-style portfolio containing my professional engineering resume, full-stack projects, and technical skills.',
-    url: 'https://yourportfolio.com', // Replace with your live URL later
+    url: 'https://yourportfolio.com', // ⚠️ Remember to update this with your final live domain name later!
     siteName: 'Mainframe Terminal OS',
     images: [
       {
-        url: '/opengraph-image.png', // Points to your custom preview image
+        url: '/assets/opengraph-image.png', // FIXED: Removed "/public" and unified extension to .png
         width: 1200,
         height: 630,
         alt: 'Mainframe Terminal OS Interface Preview',
@@ -32,13 +39,13 @@ export const metadata: Metadata = {
     type: 'website',
   },
 
-  // 3. What shows up when shared on X/Twitter
+  // 4. X / Twitter Preview Format
   twitter: {
     card: 'summary_large_image',
-    title: '[Your Name] | Software Engineer Portfolio',
+    title: 'Giovanni Amighetti | Software Engineer Portfolio',
     description:
       'Interactive terminal-style portfolio and software engineering resume.',
-    images: ['/opengraph-image.png'],
+    images: ['/assets/opengraph-image.png'], // FIXED: Linked to the exact same image matrix path
   },
 }
 
@@ -49,7 +56,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className={`${geistMono.variable}`}>
-      {/* Your exact body classes stay right here */}
       <body className='bg-black text-white h-screen flex flex-col overflow-hidden select-none font-mono antialiased'>
         {children}
       </body>

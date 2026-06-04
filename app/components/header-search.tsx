@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTerminal } from '@fortawesome/free-solid-svg-icons'
 import { portfolioRegistry } from '../data/portfolioData'
+import { executeRegistrySearch } from './search-engine'
 
 export default function HeaderSearch() {
   const router = useRouter()
@@ -13,18 +14,8 @@ export default function HeaderSearch() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // 1. Text Sweep Filter Logic (Strategy 1)
-  const query = searchQuery.trim().toLowerCase()
-  const filteredResults = query
-    ? portfolioRegistry.filter((section) => {
-        const matchTitle = section.title.toLowerCase().includes(query)
-        const matchSubtitle = section.subtitle.toLowerCase().includes(query)
-        const matchContent = section.contentBlocks.some((block) =>
-          block.toLowerCase().includes(query),
-        )
-        return matchTitle || matchSubtitle || matchContent
-      })
-    : []
+  // 1. Unified Search Engine (Upgraded Strategy)
+  const filteredResults = executeRegistrySearch(searchQuery)
 
   // Close dropdown if user clicks outside of the search wrapper
   useEffect(() => {

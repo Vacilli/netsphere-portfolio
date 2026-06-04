@@ -1,3 +1,5 @@
+// app/data/portfolioData.ts
+
 export interface PortfolioSection {
   id: string
   title: string
@@ -7,21 +9,38 @@ export interface PortfolioSection {
   contentBlocks: string[]
   meta?: {
     dateRange?: string
-    statusTag?: 'READY' | 'ONLINE' | 'STABLE' | 'ACTIVE' | 'ENCRYPTED'
+    statusTag?:
+      | 'READY'
+      | 'ONLINE'
+      | 'STABLE'
+      | 'ACTIVE'
+      | 'ENCRYPTED'
+      | 'STAGING'
+      | 'PENDING'
+      | 'ACTIVE_CORE // HOST'
+      | 'STABLE // PRODUCTION'
+      | 'ACTIVE // DEPLOYED'
+      | 'PATCH_PENDING'
     isCurrent?: boolean
+    hasVideo?: boolean
+    videoSrc?: string
+    stack?: string[]
+    isSelf?: boolean
+    liveUrl?: string
+    repoUrl?: string
   }
 }
 
 export const portfolioRegistry: PortfolioSection[] = [
   // ==========================================
-  // PROFILE SECTIONS
+  // PROFILE SECTIONS (Core Skills)
   // ==========================================
   {
     id: 'prof-interface',
     title: '/interface_layer',
     subtitle: 'Core UI & Frontend Matrix',
     category: 'PROFILE',
-    targetUrl: '/profile',
+    targetUrl: '/profile?tab=interface', // Dynamic Section Anchor
     contentBlocks: [
       'React / Next.js 15+ Core Architecture',
       'TypeScript (Strict Mode Engineering)',
@@ -35,35 +54,50 @@ export const portfolioRegistry: PortfolioSection[] = [
     title: '/infrastructure',
     subtitle: 'Backend Foundations & Data Streams',
     category: 'PROFILE',
-    targetUrl: '/profile',
+    targetUrl: '/profile?tab=infrastructure', // Dynamic Section Anchor
     contentBlocks: [
-      'Node.js / Express Runtime Engines',
-      'PostgreSQL / Prisma ORM Architecture',
       'REST & GraphQL Secure API Gateways',
-      'Redis Distributed Caching Optimization',
+      'Marketing, Analytics, Marketo and Salesforce Integration',
+      'AI-Augmented Rapid Prototyping',
     ],
-    meta: { statusTag: 'ONLINE' },
+    meta: { statusTag: 'STAGING' },
   },
   {
     id: 'prof-ops',
     title: '/operations',
     subtitle: 'Systems, Deployment & Telemetry',
     category: 'PROFILE',
-    targetUrl: '/profile',
+    targetUrl: '/profile?tab=operations', // Dynamic Section Anchor
     contentBlocks: [
       'Git Version Control & Automating CI/CD Pipelines',
-      'Docker Containers & Containerization Infrastructure',
       'Vercel & AWS Cloud Architecture Deployments',
       'High-Speed Viewport Performance Optimization',
     ],
-    meta: { statusTag: 'STABLE' },
+    meta: { statusTag: 'STAGING' },
   },
+  {
+    id: 'prof-pending-backend',
+    title: '/backend_foundations',
+    subtitle: 'Relational Frameworks & Legacy Infrastructure',
+    category: 'PROFILE',
+    targetUrl: '/profile?tab=pending',
+    contentBlocks: [
+      'Node.js / Express Runtime Engines',
+      'PostgreSQL / Prisma ORM Architecture',
+      'Docker Containers & Containerization Infrastructure',
+    ],
+    meta: { statusTag: 'PENDING' },
+  },
+
+  // ==========================================
+  // PROFILE SECTIONS (Operational Timeline)
+  // ==========================================
   {
     id: 'exp-senior',
     title: 'Senior Full Stack Engineer',
     subtitle: 'Ecosystem Architecture Lab',
     category: 'PROFILE',
-    targetUrl: '/profile',
+    targetUrl: '/profile?tab=experience',
     contentBlocks: [
       'Engineering high-performance web infrastructure and managing complex state lifecycles.',
       'Refactoring legacy monolithic applications into modern, modular Next.js environments.',
@@ -75,7 +109,7 @@ export const portfolioRegistry: PortfolioSection[] = [
     title: 'Software Engineer',
     subtitle: 'Core Systems Corp',
     category: 'PROFILE',
-    targetUrl: '/profile',
+    targetUrl: '/profile?tab=experience',
     contentBlocks: [
       'Developed robust, secure RESTful APIs and interactive micro-frontends.',
       'Optimized database queries and streamlined state management architectures across decoupled client modules.',
@@ -84,31 +118,64 @@ export const portfolioRegistry: PortfolioSection[] = [
   },
 
   // ==========================================
-  // VAULT SECTIONS (YOUR PROJECTS)
+  // VAULT SECTIONS (The Repositories) - FIXED WITH UNIQUE PARAMS
   // ==========================================
   {
-    id: 'vault-proj-1',
-    title: 'Hyper-Secure Mainframe Shell',
-    subtitle: 'Next.js 15 App Router Terminal Template',
+    id: 'NEX-01',
+    title: 'Codex OS',
+    subtitle: 'Operational Infrastructure Task Manager',
     category: 'VAULT',
-    targetUrl: '/vault',
+    targetUrl: '/vault?node=codex-os', // UNIQUE EXPLICIT ROUTE
     contentBlocks: [
-      'An open-source interactive portfolio capsule engineered purely in React and Tailwind CSS.',
-      'Features a custom lightweight state scheduler to handle conditional asynchronous booting lifecycles seamlessly without layout shifts.',
+      'A minimal, system-level task management architecture built to replace bloated traditional interfaces.',
+      'Features an active terminal focus engine, responsive data matrix arrays, and direct state synchronization hooks.',
     ],
-    meta: { statusTag: 'ACTIVE' },
+    meta: {
+      statusTag: 'STABLE // PRODUCTION',
+      hasVideo: true,
+      videoSrc: '/assets/demo.gif',
+      stack: ['React', 'Tailwind v3', 'TypeScript'],
+      liveUrl: 'https://codex-os-task-manager.vercel.app/',
+      repoUrl: 'https://github.com/Vacilli/React-To_Do-List',
+    },
   },
   {
-    id: 'vault-proj-2',
-    title: 'Distributed Telemetry Pipeline',
-    subtitle: 'High-Throughput Node Log Aggregator',
+    id: 'NEX-02',
+    title: 'Netsphere Universe',
+    subtitle: 'Ecosystem Telemetry Dashboard & Portfolio',
     category: 'VAULT',
-    targetUrl: '/vault',
+    targetUrl: '/vault?node=netsphere-universe', // UNIQUE EXPLICIT ROUTE
     contentBlocks: [
-      'A decoupled analytics daemon designed to capture React runtime error footprints.',
-      'Streams raw payload blocks directly into a distributed PostgreSQL database clustered with Redis caching mechanisms.',
+      'The core aesthetic node for full-stack operations.',
+      'Built using a high-speed programmatic interface with zero wasted motion, dynamic viewport portals, and unified theme inversion variables.',
     ],
-    meta: { statusTag: 'ENCRYPTED' },
+    meta: {
+      statusTag: 'ACTIVE // DEPLOYED',
+      hasVideo: true,
+      videoSrc: '/assets/portfolio-demo.gif',
+      stack: ['Next.js 15', 'Tailwind v4', 'React Server Components'],
+      liveUrl: 'https://netsphere.universe',
+      repoUrl: 'https://github.com/yourusername/netsphere',
+    },
+  },
+  {
+    id: 'NEX-03',
+    title: 'Netsphere Deck OS',
+    subtitle: 'Local Mainframe Terminal Node',
+    category: 'VAULT',
+    targetUrl: '/vault?node=netsphere-deck-os', // UNIQUE EXPLICIT ROUTE
+    contentBlocks: [
+      'The exact interactive terminal module you are browsing right now.',
+      'Engineered to handle state-locked boot arrays, clean dynamic subview navigation channels, and a secure server-side communications uplink.',
+    ],
+    meta: {
+      statusTag: 'ACTIVE_CORE // HOST',
+      hasVideo: false,
+      videoSrc: '',
+      stack: ['Next.js 15', 'TypeScript', 'Server Actions', 'Resend API'],
+      liveUrl: '#',
+      repoUrl: 'https://github.com/yourusername/netsphere',
+    },
   },
 
   // ==========================================

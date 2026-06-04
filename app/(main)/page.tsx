@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import AuthSequence from '../components/auth-sequence'
+import InfoManifest from '../components/info-manifest'
+import TerminalInput from '../components/terminal-input-props'
 
 interface LogEntry {
   id: string
@@ -14,16 +16,12 @@ export default function TerminalMainframePage() {
   const router = useRouter()
   const [inputCommand, setInputCommand] = useState('')
   const [terminalLogs, setTerminalLogs] = useState<LogEntry[]>([])
-
-  // Terminal Native Authentication Flags
   const [isAwaitingPassword, setIsAwaitingPassword] = useState(false)
   const [authStage, setAuthStage] = useState<
     'idle' | 'loading_success' | 'loading_failed'
   >('idle')
-
   const logContainerRef = useRef<HTMLDivElement>(null)
 
-  // 1. Core Log Injection Stream (Strict Mode Compatible)
   useEffect(() => {
     const activeTimers: NodeJS.Timeout[] = []
     const bootSequence = [
@@ -57,22 +55,17 @@ export default function TerminalMainframePage() {
         },
         (index + 1) * 250,
       )
-
       activeTimers.push(streamTimer)
     })
-
-    // Clears timers on unmount so Strict Mode double-taps reset safely
     return () => activeTimers.forEach((timerId) => clearTimeout(timerId))
   }, [])
 
-  // Auto-scroll logs mechanism
   useEffect(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight
     }
   }, [terminalLogs])
 
-  // Handles the interactive button click sequence after full-screen loading completes
   const handleAuthSequenceResolution = () => {
     if (authStage === 'loading_success') {
       setAuthStage('idle')
@@ -90,7 +83,6 @@ export default function TerminalMainframePage() {
     }
   }
 
-  // 2. Command Line Router Execution Logic
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const rawInput = inputCommand.trim()
@@ -101,13 +93,8 @@ export default function TerminalMainframePage() {
         { id: `${Date.now()}-user`, text: `> **********`, type: 'user' },
       ])
       setIsAwaitingPassword(false)
-
-      if (rawInput === 'password123') {
-        setAuthStage('loading_success')
-      } else {
-        setAuthStage('loading_failed')
-      }
-
+      if (rawInput === 'password123') setAuthStage('loading_success')
+      else setAuthStage('loading_failed')
       setInputCommand('')
       return
     }
@@ -133,7 +120,6 @@ export default function TerminalMainframePage() {
             },
           ])
           break
-
         case 'about':
           const manifest = [
             'SYSTEM_MANIFEST:',
@@ -146,7 +132,6 @@ export default function TerminalMainframePage() {
             '------------------------------------------',
             'STATUS: OPEN_TO_OPPORTUNITIES // SEEKING_COLLABORATION',
           ]
-
           manifest.forEach((line, i) => {
             setTerminalLogs((prev) => [
               ...prev,
@@ -154,7 +139,6 @@ export default function TerminalMainframePage() {
             ])
           })
           break
-
         case 'profile':
           setTerminalLogs((prev) => [
             ...prev,
@@ -166,7 +150,6 @@ export default function TerminalMainframePage() {
           ])
           setTimeout(() => router.push('/profile'), 600)
           break
-
         case 'demo':
         case 'vault':
           setTerminalLogs((prev) => [
@@ -179,7 +162,6 @@ export default function TerminalMainframePage() {
           ])
           setTimeout(() => router.push('/vault'), 600)
           break
-
         case 'contact':
           setTerminalLogs((prev) => [
             ...prev,
@@ -191,7 +173,6 @@ export default function TerminalMainframePage() {
           ])
           setTimeout(() => router.push('/secure-line'), 600)
           break
-
         case 'login':
           setTerminalLogs((prev) => [
             ...prev,
@@ -202,17 +183,15 @@ export default function TerminalMainframePage() {
             },
             {
               id: `log-${Date.now()}-2`,
-              text: 'ENTER_SYSTEM_KEY: >',
-              type: 'system',
+              text: 'ENTER_SYSTEM_KEY (MASK ACTIVE)...',
+              type: 'warn',
             },
           ])
           setIsAwaitingPassword(true)
           break
-
         case 'clear':
           setTerminalLogs([])
           break
-
         default:
           setTerminalLogs((prev) => [
             ...prev,
@@ -227,97 +206,103 @@ export default function TerminalMainframePage() {
   }
 
   return (
-    <div className='space-y-8 max-w-2xl font-mono text-xs text-[var(--color-text-main)] animate-scan p-4 relative h-full'>
+    /* RESPONSIVE UPGRADE: Swapped hard-coded p-4 for a max-w layout that scales contextually */
+    <div className='space-y-6 md:space-y-8 max-w-2xl font-mono text-xs text-[var(--color-text-main)] animate-scan p-1 sm:p-4 relative w-full h-full flex flex-col justify-between md:block'>
       {authStage !== 'idle' && (
         <AuthSequence
           status={authStage === 'loading_success' ? 'success' : 'failed'}
-          onComplete={handleAuthSequenceResolution}
+          onComplete={handleAuthResolution}
         />
       )}
 
-      {/* HEADER DIAGNOSTIC DISPLAY */}
-      <div className='border-b border-[var(--color-border-subtle)] pb-4'>
-        <p className='text-xs text-[var(--color-accent-action)] mb-1 animate-pulse'>
-          &gt; SYSTEM_STATUS: OPERATIONAL // NODE_0X4F_ONLINE
-        </p>
-        <h1 className='text-xl font-bold uppercase tracking-wider'>
-          Core Console // Terminal Mainframe
-        </h1>
-      </div>
-
-      {/* STATIC METRIC MATRIX PANEL */}
-      <div className='grid grid-cols-2 gap-4 border border-[var(--color-border-subtle)]/40 bg-zinc-950/20 p-4 rounded-sm'>
-        <div className='space-y-1'>
-          <p className='text-[10px] text-[var(--color-text-dim)] uppercase'>
-            [PARAMETER]
-          </p>
-          <p>
-            <span className='text-[var(--color-text-dim)]'>LOC:</span>{' '}
-            SAN_JOY_CR
-          </p>
-          <p>
-            <span className='text-[var(--color-text-dim)]'>SYS:</span>{' '}
-            NEXTJS_15_APP
-          </p>
-        </div>
-        <div className='space-y-1'>
-          <p className='text-[10px] text-[var(--color-text-dim)] uppercase'>
-            [TELEMETRY]
-          </p>
-          <p>
-            <span className='text-[var(--color-text-dim)]'>ROLE:</span>{' '}
-            CORE_ENGINEER
-          </p>
-          <p>
-            <span className='text-[var(--color-text-dim)]'>UPTIME:</span>{' '}
-            LIVE_GRID_ACTIVE
-          </p>
-        </div>
-      </div>
-
-      {/* LIVE SIMULATED STREAM LOG WINDOW */}
-      <div className='space-y-2'>
-        <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-wider'>
-          // LOG_STREAM_FEED
-        </p>
-        <div
-          ref={logContainerRef}
-          className='h-48 w-full bg-black/40 border border-[var(--color-border-subtle)] p-4 overflow-y-auto custom-scrollbar space-y-2 rounded-sm'
-        >
-          {terminalLogs.map((log) => (
-            <p
-              key={log.id}
-              className={`leading-relaxed tracking-wide ${log.type === 'success' ? 'text-emerald-400' : log.type === 'warn' ? 'text-amber-500 font-semibold' : log.type === 'user' ? 'text-[var(--color-accent-action)]' : 'text-zinc-400'}`}
-            >
-              {log.text}
+      {/* PARENT FLEX BLOCK */}
+      <div className='space-y-6 md:space-y-8 flex-1 md:flex-none'>
+        {/* COMPACT ROUTE HEADER MATRIX */}
+        <div className='border-b border-[var(--color-border-subtle)] pb-4 flex items-center justify-between gap-4'>
+          <div>
+            <p className='text-[10px] sm:text-xs text-[var(--color-accent-action)] mb-1 animate-pulse tracking-wide font-bold'>
+              &gt; SYSTEM_STATUS: OPERATIONAL // NODE_0X4F_ONLINE
             </p>
-          ))}
+            {/* RESPONSIVE UPGRADE: Adjusted text metrics down on mobile panels to avoid truncation layout spills */}
+            <h1 className='text-base sm:text-xl font-bold uppercase tracking-wider leading-tight'>
+              Core Console // Terminal Mainframe
+            </h1>
+          </div>
+          <InfoManifest currentRoute='HOME' />
+        </div>
+
+        {/* METRIC MATRIX PANEL */}
+        {/* RESPONSIVE UPGRADE: Stacks on micro-screens (grid-cols-1) then springs back to 2 columns on tablets */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 border border-[var(--color-border-subtle)]/40 bg-zinc-950/20 p-3 sm:p-4 rounded-sm'>
+          <div className='space-y-1'>
+            <p className='text-[9px] text-[var(--color-text-dim)] uppercase tracking-wider'>
+              [PARAMETER]
+            </p>
+            <p className='text-[11px] sm:text-xs'>
+              <span className='text-[var(--color-text-dim)]'>LOC:</span>{' '}
+              SAN_JOY_CR
+            </p>
+            <p className='text-[11px] sm:text-xs'>
+              <span className='text-[var(--color-text-dim)]'>SYS:</span>{' '}
+              NEXTJS_15_APP
+            </p>
+          </div>
+          <div className='space-y-1 border-t border-zinc-900/60 pt-2 sm:pt-0 sm:border-t-0'>
+            <p className='text-[9px] text-[var(--color-text-dim)] uppercase tracking-wider'>
+              [TELEMETRY]
+            </p>
+            <p className='text-[11px] sm:text-xs'>
+              <span className='text-[var(--color-text-dim)]'>ROLE:</span>{' '}
+              CORE_ENGINEER
+            </p>
+            <p className='text-[11px] sm:text-xs'>
+              <span className='text-[var(--color-text-dim)]'>UPTIME:</span>{' '}
+              LIVE_GRID_ACTIVE
+            </p>
+          </div>
+        </div>
+
+        {/* SIMULATED STREAM FEED LOG WINDOW */}
+        <div className='space-y-2'>
+          <p className='text-[9px] sm:text-[10px] text-[var(--color-text-dim)] uppercase tracking-wider'>
+            // LOG_STREAM_FEED
+          </p>
+          {/* RESPONSIVE UPGRADE: Tweaked log feed viewport heights so it doesn't run past tiny phone touch-lines */}
+          <div
+            ref={logContainerRef}
+            className='h-40 sm:h-48 w-full bg-black/40 border border-[var(--color-border-subtle)] p-3 sm:p-4 overflow-y-auto custom-scrollbar space-y-2 rounded-sm text-[11px] sm:text-xs'
+          >
+            {terminalLogs.map((log) => (
+              <p
+                key={log.id}
+                className={`leading-relaxed tracking-wide break-words ${
+                  log.type === 'success'
+                    ? 'text-emerald-400'
+                    : log.type === 'warn'
+                      ? 'text-amber-500 font-semibold'
+                      : log.type === 'user'
+                        ? 'text-[var(--color-accent-action)]'
+                        : 'text-zinc-400'
+                }`}
+              >
+                {log.text}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* CORE TERMINAL FIELD INPUT COMMAND ROUTER */}
-      <form onSubmit={handleCommandSubmit} className='space-y-2'>
-        <label
-          htmlFor='terminal-input'
-          className='block text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest'
-        >
-          EXECUTE_ROUTINE_PROMPT
-        </label>
-        <div className='flex items-center gap-2 border border-[var(--color-border-subtle)] focus-within:border-[var(--color-accent-action)] bg-zinc-950/40 p-3 transition-all rounded-sm'>
-          <span className='text-[var(--color-accent-action)] font-bold select-none'>
-            $
-          </span>
-          <input
-            id='terminal-input'
-            type='text'
-            autoComplete='off'
-            value={inputCommand}
-            onChange={(e) => setInputCommand(e.target.value)}
-            placeholder='TYPE help, about, profile, demo or contact...'
-            className='w-full bg-transparent border-none outline-none text-xs text-[var(--color-text-main)] uppercase tracking-wide focus:ring-0 p-0'
-          />
-        </div>
-      </form>
+      {/* CLEAN INJECTED FIELD CONTROLLER */}
+      {/* RESPONSIVE UPGRADE: Added a tiny layout wrapper gap spacing rule for separate stacking */}
+      <div className='pt-4 md:pt-0 shrink-0'>
+        <TerminalInput
+          inputCommand={inputCommand}
+          setInputCommand={setInputCommand}
+          isAwaitingPassword={isAwaitingPassword}
+          setIsAwaitingPassword={setIsAwaitingPassword}
+          onSubmit={handleCommandSubmit}
+        />
+      </div>
     </div>
   )
 }
