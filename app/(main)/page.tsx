@@ -211,7 +211,7 @@ export default function TerminalMainframePage() {
       {authStage !== 'idle' && (
         <AuthSequence
           status={authStage === 'loading_success' ? 'success' : 'failed'}
-          onComplete={handleAuthResolution}
+          onComplete={handleAuthSequenceResolution}
         />
       )}
 
