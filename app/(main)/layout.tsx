@@ -48,9 +48,17 @@ export default function MainSiteLayout({
         </section>
       </div>
 
-      <footer className='h-7 border-t border-zinc-900 bg-black text-[10px] text-zinc-500 font-mono px-4 flex justify-between items-center select-none tracking-widest shrink-0 z-20'>
-        <div>&copy; 2026 MAINFRAME.OS // SYSTEM_ARCHITECT_PORTFOLIO</div>
-        <div className='text-emerald-500/70 animate-pulse hidden sm:block'>
+      <footer className='min-h-7 py-1 sm:py-0 border-t border-zinc-900 bg-black text-[10px] text-zinc-500 font-mono px-4 flex flex-col sm:flex-row justify-between sm:items-center select-none tracking-widest shrink-0 z-20 gap-1'>
+        {/* FIXED: Added whitespace-nowrap and flex-wrap utility flags to handle small viewports safely */}
+        <div className='whitespace-nowrap flex flex-wrap gap-x-2 items-center uppercase'>
+          <span>&copy; 2026 MAINFRAME.OS</span>
+          <span className='text-zinc-800 hidden xs:inline'>//</span>
+          <span className='text-zinc-600 sm:text-zinc-500'>
+            SYSTEM_ARCHITECT_PORTFOLIO
+          </span>
+        </div>
+
+        <div className='text-emerald-500/70 animate-pulse hidden sm:block whitespace-nowrap'>
           SECURE_CONNECTION_ESTABLISHED // NODE_01
         </div>
       </footer>
