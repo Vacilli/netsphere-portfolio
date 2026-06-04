@@ -57,7 +57,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className={`${geistMono.variable}`}>
-      <body className='bg-black text-white h-screen flex flex-col overflow-hidden select-none font-mono antialiased'>
+      <body className='bg-black text-white h-screen-safe min-h-dvh max-h-dvh flex flex-col overflow-hidden select-none font-mono antialiased'>
         {children}
       </body>
     </html>
