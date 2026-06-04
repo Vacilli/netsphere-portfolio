@@ -154,8 +154,8 @@ export const portfolioRegistry: PortfolioSection[] = [
       hasVideo: true,
       videoSrc: '/assets/portfolio-demo.gif',
       stack: ['Next.js 15', 'Tailwind v4', 'React Server Components'],
-      liveUrl: 'https://netsphere.universe',
-      repoUrl: 'https://github.com/yourusername/netsphere',
+      liveUrl: 'https://netsphere-portfolio.vercel.app/',
+      repoUrl: 'https://github.com/Vacilli/netsphere-portfolio',
     },
   },
   {

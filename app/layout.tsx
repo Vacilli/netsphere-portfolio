@@ -9,6 +9,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   // 1. Browser Tab Configuration
+  metadataBase: new URL('https://netsphere-portfolio.vercel.app/'),
   title: 'MAINFRAME // Giovanni Amighetti — Software Engineer',
   description:
     'Interactive terminal interface displaying the professional dossier, core technical competencies, and project vault of Giovanni Amighetti.',
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     title: 'Giovanni Amighetti | Software Engineer & Systems Architect',
     description:
       'Explore an interactive terminal-style portfolio containing my professional engineering resume, full-stack projects, and technical skills.',
-    url: 'https://yourportfolio.com', // ⚠️ Remember to update this with your final live domain name later!
+    url: 'https://netsphere-portfolio.vercel.app/',
     siteName: 'Mainframe Terminal OS',
     images: [
       {
