@@ -39,6 +39,10 @@ export default function TerminalMainframePage() {
         text: 'TYPE "help" TO DISCOVER ACTIVE TERMINAL ROUTINES.',
         type: 'system',
       },
+      {
+        text: 'USE THE NAVIGATION TREE OR TERMINAL COMMANDS TO EXPLORE.',
+        type: 'success',
+      },
     ] as const
 
     bootSequence.forEach((log, index) => {
@@ -123,6 +127,7 @@ export default function TerminalMainframePage() {
         case 'about':
           const manifest = [
             'SYSTEM_MANIFEST:',
+            'GIOVANNI AMIGHETTI',
             '------------------------------------------',
             'IDENTITY: Fullstack Software Engineer',
             'FOCUS: Low-level systems, hardened UI/UX, Core Architectures.',
@@ -206,7 +211,6 @@ export default function TerminalMainframePage() {
   }
 
   return (
-    /* RESPONSIVE UPGRADE: Swapped hard-coded p-4 for a max-w layout that scales contextually */
     <div className='space-y-6 md:space-y-8 max-w-2xl font-mono text-xs text-[var(--color-text-main)] animate-scan p-1 sm:p-4 relative w-full h-full flex flex-col justify-between md:block'>
       {authStage !== 'idle' && (
         <AuthSequence
@@ -223,16 +227,17 @@ export default function TerminalMainframePage() {
             <p className='text-[10px] sm:text-xs text-[var(--color-accent-action)] mb-1 animate-pulse tracking-wide font-bold'>
               &gt; SYSTEM_STATUS: OPERATIONAL // NODE_0X4F_ONLINE
             </p>
-            {/* RESPONSIVE UPGRADE: Adjusted text metrics down on mobile panels to avoid truncation layout spills */}
             <h1 className='text-base sm:text-xl font-bold uppercase tracking-wider leading-tight'>
               Core Console // Terminal Mainframe
             </h1>
+            <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest mt-1 font-semibold'>
+              // INDEX_ROUTE // MAIN_HOME_PAGE_NODE
+            </p>
           </div>
           <InfoManifest currentRoute='HOME' />
         </div>
 
         {/* METRIC MATRIX PANEL */}
-        {/* RESPONSIVE UPGRADE: Stacks on micro-screens (grid-cols-1) then springs back to 2 columns on tablets */}
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 border border-[var(--color-border-subtle)]/40 bg-zinc-950/20 p-3 sm:p-4 rounded-sm'>
           <div className='space-y-1'>
             <p className='text-[9px] text-[var(--color-text-dim)] uppercase tracking-wider'>
@@ -240,7 +245,7 @@ export default function TerminalMainframePage() {
             </p>
             <p className='text-[11px] sm:text-xs'>
               <span className='text-[var(--color-text-dim)]'>LOC:</span>{' '}
-              SAN_JOY_CR
+              SAN_JOSE_CR
             </p>
             <p className='text-[11px] sm:text-xs'>
               <span className='text-[var(--color-text-dim)]'>SYS:</span>{' '}
@@ -262,12 +267,30 @@ export default function TerminalMainframePage() {
           </div>
         </div>
 
+        {/* INTEGRATED TRANSLATION LAYER PANEL */}
+        <div className='border border-[var(--color-border-subtle)]/40 bg-zinc-950/20 p-3 sm:p-4 rounded-sm space-y-2'>
+          <p className='text-[9px] text-[var(--color-accent-action)] uppercase tracking-wider font-bold'>
+            [SYSTEM_MANIFEST: BIOGRAPHY_DECODE]
+          </p>
+          <div className='space-y-1.5'>
+            <h2 className='text-xs sm:text-sm font-bold tracking-wide text-[var(--color-text-main)] uppercase'>
+              Personal Operating System of Giovanni Amighetti
+            </h2>
+            <p className='text-[11px] sm:text-xs leading-relaxed text-[var(--color-text-dim)]'>
+              Full Stack Software Engineer specializing in React, Next.js,
+              TypeScript, modern frontend architecture, and AI-powered
+              applications. I build stable systems that connect beautiful,
+              functional user interfaces with optimized backend data structures.
+            </p>
+          </div>
+        </div>
+
         {/* SIMULATED STREAM FEED LOG WINDOW */}
         <div className='space-y-2'>
           <p className='text-[9px] sm:text-[10px] text-[var(--color-text-dim)] uppercase tracking-wider'>
             // LOG_STREAM_FEED
           </p>
-          {/* RESPONSIVE UPGRADE: Tweaked log feed viewport heights so it doesn't run past tiny phone touch-lines */}
+
           <div
             ref={logContainerRef}
             className='h-40 sm:h-48 w-full bg-black/40 border border-[var(--color-border-subtle)] p-3 sm:p-4 overflow-y-auto custom-scrollbar space-y-2 rounded-sm text-[11px] sm:text-xs'
@@ -293,7 +316,6 @@ export default function TerminalMainframePage() {
       </div>
 
       {/* CLEAN INJECTED FIELD CONTROLLER */}
-      {/* RESPONSIVE UPGRADE: Added a tiny layout wrapper gap spacing rule for separate stacking */}
       <div className='pt-4 md:pt-0 shrink-0'>
         <TerminalInput
           inputCommand={inputCommand}

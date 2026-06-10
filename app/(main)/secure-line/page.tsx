@@ -47,6 +47,9 @@ export default function SecureLinePage() {
           <h2 className='text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)]'>
             Secure Line // Comms Deck
           </h2>
+          <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest mt-1 font-semibold'>
+            // CONTACT & COLLABORATION_CHANNELS
+          </p>
         </div>
         <InfoManifest currentRoute='SECURE' />
       </div>

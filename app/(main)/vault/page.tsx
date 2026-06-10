@@ -39,6 +39,9 @@ export default function VaultPage() {
           <h2 className='text-base sm:text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)] leading-tight'>
             The Data Vault // Node Selection
           </h2>
+          <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest mt-1 font-semibold'>
+            // PROJECT_PORFOLIO & CASE_STUDIES
+          </p>
         </div>
         <InfoManifest currentRoute='VAULT' />
       </div>

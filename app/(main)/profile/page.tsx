@@ -42,6 +42,9 @@ export default function ProfilePage() {
             <h2 className='text-base sm:text-xl font-bold uppercase tracking-wider text-[var(--color-text-main)] leading-tight'>
               System Manifest // Profile
             </h2>
+            <p className='text-[10px] text-[var(--color-text-dim)] uppercase tracking-widest mt-1 font-semibold'>
+              // PROFESSIONAL_EXPERIENCE & TECHNICAL_RESUME
+            </p>
           </div>
 
           {/* MOVED: Injected inline next to the title text */}
